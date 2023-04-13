@@ -25,10 +25,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" th:classAppend="${current == 'photos' ? 'active' : ''}" aria-current="page" th:href="@{/photos}">Photos</a>
+                    <a class="nav-link" th:classAppend="${current == 'photos' ? 'active_li' : ''}" aria-current="page" th:href="@{/photos}">Photos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:classAppend="${current == 'categories' ? 'active' : ''}" aria-current="page" th:href="@{/categories}">Categories</a>
+                    <a class="nav-link" th:classAppend="${current == 'categories' ? 'active_li' : ''}" aria-current="page" th:href="@{/categories}">Categories</a>
                 </li>
 
             </ul>

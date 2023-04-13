@@ -11,23 +11,22 @@
 <body>
 <nav th:replace="~{fragments :: navbar(photos, true, ${searchcontent})}"></nav>
 <div class="container-md py-5">
-    <h1 class="text-center py-5 text-white" th:if="${photos.size() > 0}">My Photos</h1>
-<!--    <a th:href="@{/pizzas/create}" class="btn btn-dark mb-5" sec:authorize="hasAuthority('admin')">Crea nuova pizza</a>-->
+    <div class="d-flex align-items-center gap-5">
+        <h1 class="text-center text-white" th:if="${photos.size() > 0}">My Photos</h1>
+        <a th:href="@{/photos/create}" class="btn btn-warning fw-bolder" sec:authorize="hasAuthority('admin')">Add new picture</a>
+    </div>
     <div th:unless="${photos.size() > 0}" class="d-flex flex-column align-items-center py-5 gap-5">
         <h3 class="text-white fs-1 text-center">0 photos found</h3>
         <a th:href="@{/photos}" class="btn btn-dark text-white" >Go Back</a>
     </div>
 
-<!--    <th:block th:if="${message}">-->
-<!--        <div class="alert alert-dismissible fade show"-->
-<!--             th:classAppend="${#strings.equals(message.type, 'SUCCESS')} ? alert-success : alert-danger">-->
-<!--            <div th:text="${message.text}"></div>-->
-<!--            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-<!--        </div>-->
-<!--    </th:block>-->
-
-    <!--    <div th:replace="~{fragments :: alert(${message.type}, ${message.text})}"></div>-->
-
+    <th:block th:if="${message}">
+        <div class="alert alert-dismissible fade show"
+             th:classAppend="${#strings.equals(message.type, 'SUCCESS')} ? alert-success : alert-danger">
+            <div th:text="${message.text}"></div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </th:block>
 
     <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-10 my-4" th:each="photo : ${photos}" th:object="${photo}">
@@ -36,8 +35,9 @@
                 <div class="card-body row">
                     <div class="col-10">
                         <h5 class="card-title text-secondary fw-bold" th:text="*{title}"></h5>
-                        <p class="card-text" th:text="*{description}"></p>
-                        <p class="card-text" th:text="|*{isVisible ? 'Visible' : 'Hidden'}|"></p>
+                        <p th:if="*{description.length > 0}" class="card-text" th:text="*{description}"></p>
+                        <p th:if="*{description.isEmpty()}" class="card-text">No description available</p>
+                        <p class="card-text" th:text="|*{visible ? 'Visible' : 'Hidden'}|"></p>
                     </div>
                     <div class="col-2 d-flex flex-column gap-3 align-items-end">
                         <a title="View Details" th:href="@{|/photos/*{id}|}"><i class="fa-regular fa-image fa-xl" style="color: #404040;"></i></i></a>

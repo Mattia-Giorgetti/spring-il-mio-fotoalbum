@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link th:replace="~{fragments :: head}">
+  <title th:text="|Foto Album - ${photo.title}|"></title>
+</head>
+<body>
+<nav th:replace="~{fragments :: navbar(photos, false, searchcontent)}"></nav>
+<div class="container-md">
+
+  <th:block th:if="${message}">
+    <div class="alert alert-dismissible fade show mt-5"
+         th:classAppend="${#strings.equals(message.type, 'SUCCESS')} ? alert-success : alert-danger">
+      <div th:text="${message.text}"></div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </th:block>
+
+  <div class="row py-5" th:object="${photo}">
+
+    <div class="col-lg-6 col-sm-12 d-flex flex-column justify-content-center gap-3">
+      <div class="bg-dark p-4 rounded-2 my-4 my-lg-0">
+        <h2 th:text="*{title}" class="fs-1 text-warning"></h2>
+        <p th:text="*{description}" class="fs-2 text-white" th:if="*{description.length > 0}"></p>
+        <p class="fs-2 text-white" th:if="*{description.isEmpty()}">No description available</p>
+        <p th:text="|Currently *{visible ? 'Visible' : 'Hidden'}|" class="fs-5" th:classAppend="*{isVisible ? 'text-success' : 'text-danger'}"></p>
+      </div>
+      <a class="btn btn-dark mb-4 mb-lg-0 w-50" th:href="@{/photos}"><i class="fa-solid fa-chevron-left" style="color: #ffffff;"></i> Back to Photos</a>
+    </div>
+
+    <div class="col-lg-6 col-sm-12">
+      <img th:src="*{url}" th:alt="*{title}" class="img-fluid rounded-2">
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -3,6 +3,7 @@ package org.project.java.springfotoalbum.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Table(name = "photos")
@@ -19,7 +20,8 @@ public class Photo {
 
     @NotEmpty(message = "This field can't be empty")
     private String url;
-    private boolean isVisible;
+
+    private boolean visible;
 
     public Integer getId() {
         return id;
@@ -54,10 +56,10 @@ public class Photo {
     }
 
     public boolean isVisible() {
-        return isVisible;
+        return visible;
     }
 
     public void setVisible(boolean visible) {
-        isVisible = visible;
+        this.visible = visible;
     }
 }

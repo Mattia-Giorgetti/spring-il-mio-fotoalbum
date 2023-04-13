@@ -2,3 +2,7 @@ body {
  background-color: #404040;
  font-family: 'Quicksand', sans-serif;
 }
+.active_li {
+    font-weight: bolder;
+    color: black;
+}
