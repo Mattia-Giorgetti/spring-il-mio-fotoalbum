@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "photos")
 public class Photo {
@@ -22,6 +24,10 @@ public class Photo {
     private String url;
 
     private boolean visible;
+
+    @ManyToMany
+    @JoinTable(name = "photos_categories", joinColumns = @JoinColumn(name = "photo_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
 
     public Integer getId() {
         return id;
@@ -61,5 +67,13 @@ public class Photo {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }
