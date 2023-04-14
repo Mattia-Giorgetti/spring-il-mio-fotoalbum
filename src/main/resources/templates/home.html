@@ -9,7 +9,13 @@
     <title>Foto Album - Home</title>
 </head>
 <body>
-<nav th:replace="~{fragments :: navbar(home, false, searchcontent)}"></nav>
-    <h1 class="text-white text-center">Home page</h1>
+<!--<nav th:replace="~{fragments :: navbar(home, false, searchcontent)}"></nav>-->
+<div class="container-lg">
+    <h1 class="text-white text-center my-5">Welcome!</h1>
+    <div class="text-center">
+        <a class="btn btn-dark" th:href="@{/photos}">Log In</a>
+    </div>
+</div>
+
 </body>
 </html>

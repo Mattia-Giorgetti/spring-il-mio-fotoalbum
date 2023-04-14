@@ -1,18 +1,26 @@
 package org.project.java.springfotoalbum.service;
 
+import org.project.java.springfotoalbum.exceptions.CategoryNotFoundException;
 import org.project.java.springfotoalbum.exceptions.PhotoNotFoundException;
+import org.project.java.springfotoalbum.model.Category;
 import org.project.java.springfotoalbum.model.Photo;
+import org.project.java.springfotoalbum.repository.CategoryRepository;
 import org.project.java.springfotoalbum.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PhotoService {
     @Autowired
     PhotoRepository photoRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     public List<Photo> getAllPhotos(){
         return photoRepository.findAll();
@@ -35,8 +43,8 @@ public class PhotoService {
         newPhoto.setDescription(formPhoto.getDescription());
         newPhoto.setUrl(formPhoto.getUrl());
         newPhoto.setVisible(formPhoto.isVisible());
-
-
+        Set<Category> formCategories = getPhotoCategories(formPhoto);
+        newPhoto.setCategories(formCategories);
         return photoRepository.save(newPhoto);
 
     }
@@ -47,8 +55,7 @@ public class PhotoService {
         photoToUpdate.setDescription(formPhoto.getDescription());
         photoToUpdate.setUrl(formPhoto.getUrl());
         photoToUpdate.setVisible(formPhoto.isVisible());
-
-
+        photoToUpdate.setCategories(formPhoto.getCategories());
         return photoRepository.save(photoToUpdate);
     }
 
@@ -60,5 +67,14 @@ public class PhotoService {
         } catch (Exception e){
             return false;
         }
+    }
+    public Set<Category> getPhotoCategories(Photo formPhoto){
+        Set<Category> formCategories = new HashSet<>();
+        if (formPhoto.getCategories() != null){
+            for (Category cat : formPhoto.getCategories()){
+                formCategories.add(categoryRepository.findById(cat.getId()).orElseThrow(()->new CategoryNotFoundException("Category not Found")));
+            }
+        }
+        return formCategories;
     }
 }

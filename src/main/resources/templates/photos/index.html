@@ -13,7 +13,7 @@
 <div class="container-md py-5">
     <div class="d-flex align-items-center gap-5">
         <h1 class="text-center text-white" th:if="${photos.size() > 0}">My Photos</h1>
-        <a th:href="@{/photos/create}" class="btn btn-warning fw-bolder" sec:authorize="hasAuthority('admin')">Add new picture</a>
+        <a th:href="@{/photos/create}" class="btn btn-warning fw-bolder">Add new picture</a>
     </div>
     <div th:unless="${photos.size() > 0}" class="d-flex flex-column align-items-center py-5 gap-5">
         <h3 class="text-white fs-1 text-center">0 photos found</h3>
@@ -41,8 +41,8 @@
                     </div>
                     <div class="col-2 d-flex flex-column gap-3 align-items-end">
                         <a title="View Details" th:href="@{|/photos/*{id}|}"><i class="fa-regular fa-image fa-xl" style="color: #404040;"></i></i></a>
-                        <a title="Modify" th:href="@{|/photos/edit/*{id}|}" sec:authorize="hasAuthority('admin')"><i class="fa-solid fa-pen fa-xl" style="color: #404040;"></i></a>
-                        <a title="Delete" th:href="@{|/photos/delete/*{id}|}" sec:authorize="hasAuthority('admin')"><i class="fa-solid fa-trash fa-xl" style="color: #404040;"></i></a>
+                        <a title="Modify" th:href="@{|/photos/edit/*{id}|}"><i class="fa-solid fa-pen fa-xl" style="color: #404040;"></i></a>
+                        <a title="Delete" th:href="@{|/photos/delete/*{id}|}"><i class="fa-solid fa-trash fa-xl" style="color: #404040;"></i></a>
                     </div>
                 </div>
             </div>

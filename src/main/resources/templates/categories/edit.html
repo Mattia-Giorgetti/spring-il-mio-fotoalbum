@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link th:replace="~{fragments :: head}">
+  <title>Foto Album - Categories</title>
+</head>
+<body>
+<nav th:replace="~{fragments :: navbar(categories, false, searchcontent)}"></nav>
+<div class="container-md">
+  <h5 class="py-5" th:text="|Edit ${category.name}|"></h5>
+
+  <form id="categories-form" th:action="@{|/categories/edit/${category.id}|}" method="post" th:object="${category}">
+    <div class="mb-3">
+      <label for="name" class="form-label text-white">Name*</label>
+      <input type="text" class="form-control" id="name" th:field="*{name}" th:errorClass="is-invalid">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}">
+        <ul>
+          <li th:each="err : ${#fields.errors('name')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label text-white">Description</label>
+      <input type="text" class="form-control" id="description" th:field="*{description}" th:errorClass="is-invalid">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
+        <ul>
+          <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-dark">Save changes</button>
+    <a th:href="@{/categories}" class="btn btn-danger">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

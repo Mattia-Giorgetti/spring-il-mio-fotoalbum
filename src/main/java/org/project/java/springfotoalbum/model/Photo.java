@@ -3,9 +3,13 @@ package org.project.java.springfotoalbum.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "photos")
@@ -75,5 +79,8 @@ public class Photo {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+    public List<Category> sortedCategories(){
+        return categories.stream().sorted((o1,o2)->{return o1.getName().compareTo(o2.getName());}).collect(Collectors.toList());
     }
 }

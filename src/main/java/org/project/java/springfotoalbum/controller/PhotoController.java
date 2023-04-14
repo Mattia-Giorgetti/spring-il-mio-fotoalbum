@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.project.java.springfotoalbum.exceptions.PhotoNotFoundException;
 import org.project.java.springfotoalbum.model.FlashMessage;
 import org.project.java.springfotoalbum.model.Photo;
+import org.project.java.springfotoalbum.service.CategoryService;
 import org.project.java.springfotoalbum.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ import java.util.Optional;
 public class PhotoController {
     @Autowired
     PhotoService photoService;
+
+    @Autowired
+    CategoryService categoryService;
 
     @GetMapping
     public String index(Model model, @RequestParam(name = "q") Optional<String> searchcontent){
@@ -49,12 +53,14 @@ public class PhotoController {
     @GetMapping("/create")
     public String create(Model model){
         model.addAttribute("photo", new Photo());
+        model.addAttribute("categoryList", categoryService.getAllCategories());
         return "/photos/create";
     }
 
     @PostMapping("/create")
     public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
         if (bindingResult.hasErrors()){
+            model.addAttribute("categoryList", categoryService.getAllCategories());
             return "/photos/create";
         }
         photoService.addPhoto(formPhoto);
@@ -67,6 +73,7 @@ public class PhotoController {
         try{
             Photo photo = photoService.getPhotoById(id);
             model.addAttribute("photo", photo);
+            model.addAttribute("categoryList", categoryService.getAllCategories());
             return "/photos/edit";
         } catch (PhotoNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cant't find photo with id: " + id);
@@ -76,6 +83,7 @@ public class PhotoController {
     @PostMapping("/edit/{id}")
     public String update(@PathVariable Integer id, @Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()){
+            model.addAttribute("categoryList", categoryService.getAllCategories());
             return "/photos/edit";
         }
         try {

@@ -29,6 +29,14 @@
         <p class="fs-2 text-white" th:if="*{description.isEmpty()}">No description available</p>
         <p th:text="|Currently *{visible ? 'Visible' : 'Hidden'}|" class="fs-5" th:classAppend="*{isVisible ? 'text-success' : 'text-danger'}"></p>
       </div>
+      <div class="bg-dark p-4 rounded-2 my-4 my-lg-0">
+        <h5 class="text-warning">Categories</h5>
+        <ul class="list-unstyled mt-3" th:if="${photo.categories.size() > 0}">
+          <li th:each="category : ${photo.sortedCategories()}" th:text="|• ${category.name}|" class="text-white mb-2"></li>
+        </ul>
+        <div th:unless="${photo.categories.size() > 0}" class="text-white">No categories available for this element</div>
+
+      </div>
       <a class="btn btn-dark mb-4 mb-lg-0 w-50" th:href="@{/photos}"><i class="fa-solid fa-chevron-left" style="color: #ffffff;"></i> Back to Photos</a>
     </div>
 
