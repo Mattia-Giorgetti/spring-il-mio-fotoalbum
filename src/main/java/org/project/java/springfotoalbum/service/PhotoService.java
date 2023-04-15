@@ -29,6 +29,14 @@ public class PhotoService {
         return photoRepository.findByTitleContainingIgnoreCase(searchcontent);
     }
 
+    public List<Photo> getVisiblePhotos(){
+        return photoRepository.findByVisibleTrue();
+    }
+
+    public List<Photo> getFilteredVisiblePhotos(String searchcontent){
+        return photoRepository.findByTitleContainingIgnoreCaseAndVisibleTrue(searchcontent);
+    }
+
     public Photo getPhotoById(Integer id){
         Optional<Photo> photo = photoRepository.findById(id);
         if (photo.isPresent()){

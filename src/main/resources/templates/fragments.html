@@ -30,6 +30,9 @@
                 <li class="nav-item">
                     <a class="nav-link" th:classAppend="${current == 'categories' ? 'active_li' : ''}" aria-current="page" th:href="@{/categories}">Categories</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classAppend="${current == 'mails' ? 'active_li' : ''}" aria-current="page" th:href="@{/mails}">eMails</a>
+                </li>
 
             </ul>
             <form class="d-flex ms-auto" role="search" method="get" th:action="@{/photos}" th:if="${showsearch}">

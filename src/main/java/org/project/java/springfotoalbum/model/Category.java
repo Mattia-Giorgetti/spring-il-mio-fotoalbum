@@ -1,5 +1,6 @@
 package org.project.java.springfotoalbum.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.annotations.OnDelete;
@@ -20,6 +21,7 @@ public class Category {
 
     private String description;
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Photo> photos;
 
