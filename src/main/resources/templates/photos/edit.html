@@ -12,7 +12,7 @@
 <nav th:replace="~{fragments :: navbar(photos, false, searchcontent)}"></nav>
 <div class="container-md">
   <h1 class="py-5 text-center text-white" th:text="|Edit ${photo.title}|"></h1>
-  <form id="photo-form" method="post" th:object="${photo}" th:action="@{|/photos/edit/${photo.id}|}">
+  <form id="photo-form" method="post" th:object="${photo}" th:action="@{|/photos/edit/${photo.id}|}" enctype="multipart/form-data">
 
     <ul>
       <li th:each="err: ${#fields.globalErrors()}" th:text="${err}"></li>
@@ -43,10 +43,10 @@
     <!--        IMAGE URL  -->
     <div class="mb-3">
       <label for="url" class="form-label text-white">Image URL*</label>
-      <input type="text" class="form-control" id="url" th:field="*{url}" th:errorClass="is-invalid">
-      <div class="invalid-feedback" th:if="${#fields.hasErrors('url')}">
+      <input type="file" class="form-control" id="url" th:field="*{multipartFile}" th:errorClass="is-invalid">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('multipartFile')}">
         <ul>
-          <li th:each="err : ${#fields.errors('url')}" th:text="${err}"></li>
+          <li th:each="err : ${#fields.errors('multipartFile')}" th:text="${err}"></li>
         </ul>
       </div>
     </div>

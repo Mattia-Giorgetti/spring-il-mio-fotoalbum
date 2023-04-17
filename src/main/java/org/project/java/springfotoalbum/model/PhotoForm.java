@@ -1,38 +1,46 @@
 package org.project.java.springfotoalbum.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.project.java.springfotoalbum.validators.ValidImageFile;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-@Entity
-@Table(name = "photos")
-public class Photo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PhotoForm {
+
+
+    @ValidImageFile(message = "This field is mandatory")
+    private MultipartFile multipartFile;
     private Integer id;
-
     @NotEmpty(message = "This field can't be empty")
     @Size(min = 1, max = 40, message = "Characters between 1 and 40")
     private String title;
-    @Lob
     private String description;
-
-    @Lob
-    @Column(length = 16777215, nullable = false)
-    private byte[] url;
-
     private boolean visible;
-
-    @ManyToMany
-    @JoinTable(name = "photos_categories", joinColumns = @JoinColumn(name = "photo_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private byte[] url;
     private Set<Category> categories;
+
+    public PhotoForm() {
+    }
+
+    public PhotoForm(Photo photo){
+        this.id = photo.getId();
+        this.title = photo.getTitle();
+        this.description = photo.getDescription();
+        this.url = photo.getUrl();
+        this.visible = photo.isVisible();
+        this.categories = photo.getCategories();
+    }
+
+    public MultipartFile getMultipartFile() {
+        return multipartFile;
+    }
+
+    public void setMultipartFile(MultipartFile multipartFile) {
+        this.multipartFile = multipartFile;
+    }
 
     public Integer getId() {
         return id;
@@ -58,14 +66,6 @@ public class Photo {
         this.description = description;
     }
 
-    public byte[] getUrl() {
-        return url;
-    }
-
-    public void setUrl(byte[] url) {
-        this.url = url;
-    }
-
     public boolean isVisible() {
         return visible;
     }
@@ -74,14 +74,15 @@ public class Photo {
         this.visible = visible;
     }
 
+    public byte[] getUrl() {
+        return url;
+    }
+
     public Set<Category> getCategories() {
         return categories;
     }
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
-    }
-    public List<Category> sortedCategories(){
-        return categories.stream().sorted((o1,o2)->{return o1.getName().compareTo(o2.getName());}).collect(Collectors.toList());
     }
 }

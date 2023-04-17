@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.project.java.springfotoalbum.exceptions.PhotoNotFoundException;
 import org.project.java.springfotoalbum.model.FlashMessage;
 import org.project.java.springfotoalbum.model.Photo;
+import org.project.java.springfotoalbum.model.PhotoForm;
 import org.project.java.springfotoalbum.service.CategoryService;
 import org.project.java.springfotoalbum.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,18 +54,19 @@ public class PhotoController {
     }
     @GetMapping("/create")
     public String create(Model model){
-        model.addAttribute("photo", new Photo());
+        PhotoForm photo = new PhotoForm(new Photo());
+        model.addAttribute("photo", photo);
         model.addAttribute("categoryList", categoryService.getAllCategories());
         return "/photos/create";
     }
 
     @PostMapping("/create")
-    public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
+    public String store(@Valid @ModelAttribute("photo") PhotoForm photoForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) throws IOException {
         if (bindingResult.hasErrors()){
             model.addAttribute("categoryList", categoryService.getAllCategories());
             return "/photos/create";
         }
-        photoService.addPhoto(formPhoto);
+        photoService.addPhoto(photoForm);
         redirectAttributes.addFlashAttribute("message", new FlashMessage(FlashMessage.FleshMessageType.SUCCESS, "New Photo Created"));
         return "redirect:/photos";
     }
@@ -71,8 +74,9 @@ public class PhotoController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model){
         try{
-            Photo photo = photoService.getPhotoById(id);
-            model.addAttribute("photo", photo);
+            Photo photoToUpdate = photoService.getPhotoById(id);
+            PhotoForm photoForm = new PhotoForm(photoToUpdate);
+            model.addAttribute("photo", photoForm);
             model.addAttribute("categoryList", categoryService.getAllCategories());
             return "/photos/edit";
         } catch (PhotoNotFoundException e){
@@ -81,7 +85,7 @@ public class PhotoController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable Integer id, @Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
+    public String update(@PathVariable Integer id, @Valid @ModelAttribute("photo") PhotoForm formPhoto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()){
             model.addAttribute("categoryList", categoryService.getAllCategories());
             return "/photos/edit";
@@ -90,7 +94,7 @@ public class PhotoController {
             Photo updatedPhoto = photoService.updatePhoto(formPhoto, id);
             redirectAttributes.addFlashAttribute("message", new FlashMessage(FlashMessage.FleshMessageType.SUCCESS, "Photo Updated"));
             return "redirect:/photos/" + updatedPhoto.getId();
-        } catch (PhotoNotFoundException e){
+        } catch (PhotoNotFoundException | IOException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }

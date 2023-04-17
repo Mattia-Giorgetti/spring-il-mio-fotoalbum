@@ -41,7 +41,7 @@
     </div>
 
     <div class="col-lg-6 col-sm-12">
-      <img th:src="*{url}" th:alt="*{title}" class="img-fluid rounded-2">
+      <img th:src="@{|/files/${photo.id}|}" th:alt="*{title}" class="img-fluid rounded-2">
     </div>
   </div>
 </div>

@@ -4,11 +4,13 @@ import org.project.java.springfotoalbum.exceptions.CategoryNotFoundException;
 import org.project.java.springfotoalbum.exceptions.PhotoNotFoundException;
 import org.project.java.springfotoalbum.model.Category;
 import org.project.java.springfotoalbum.model.Photo;
+import org.project.java.springfotoalbum.model.PhotoForm;
 import org.project.java.springfotoalbum.repository.CategoryRepository;
 import org.project.java.springfotoalbum.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -45,11 +47,11 @@ public class PhotoService {
             throw new PhotoNotFoundException("Can't find photo with this id");
         }
     }
-    public Photo addPhoto(Photo formPhoto){
+    public Photo addPhoto(PhotoForm formPhoto) throws IOException {
         Photo newPhoto = new Photo();
         newPhoto.setTitle(formPhoto.getTitle());
         newPhoto.setDescription(formPhoto.getDescription());
-        newPhoto.setUrl(formPhoto.getUrl());
+        newPhoto.setUrl(formPhoto.getMultipartFile().getBytes());
         newPhoto.setVisible(formPhoto.isVisible());
         Set<Category> formCategories = getPhotoCategories(formPhoto);
         newPhoto.setCategories(formCategories);
@@ -57,11 +59,11 @@ public class PhotoService {
 
     }
 
-    public Photo updatePhoto(Photo formPhoto, Integer id) throws PhotoNotFoundException {
+    public Photo updatePhoto(PhotoForm formPhoto, Integer id) throws PhotoNotFoundException, IOException {
         Photo photoToUpdate = getPhotoById(id);
         photoToUpdate.setTitle(formPhoto.getTitle());
         photoToUpdate.setDescription(formPhoto.getDescription());
-        photoToUpdate.setUrl(formPhoto.getUrl());
+        photoToUpdate.setUrl(formPhoto.getMultipartFile().getBytes());
         photoToUpdate.setVisible(formPhoto.isVisible());
         photoToUpdate.setCategories(formPhoto.getCategories());
         return photoRepository.save(photoToUpdate);
@@ -76,7 +78,7 @@ public class PhotoService {
             return false;
         }
     }
-    public Set<Category> getPhotoCategories(Photo formPhoto){
+    public Set<Category> getPhotoCategories(PhotoForm formPhoto){
         Set<Category> formCategories = new HashSet<>();
         if (formPhoto.getCategories() != null){
             for (Category cat : formPhoto.getCategories()){
