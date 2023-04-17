@@ -1,5 +1,6 @@
 package org.project.java.springfotoalbum.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -25,6 +26,7 @@ public class Photo {
     private String description;
 
     @Lob
+    @JsonIgnore
     @Column(length = 16777215, nullable = false)
     private byte[] url;
 
