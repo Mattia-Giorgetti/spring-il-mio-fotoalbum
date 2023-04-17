@@ -2,6 +2,7 @@ package org.project.java.springfotoalbum.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "mails")
@@ -12,10 +13,12 @@ public class Mail {
     private Integer id;
 
     @Email
+    @NotEmpty(message = "Mail address is mandatory")
     @Column(nullable = false)
     private String mail;
 
     @Lob
+    @NotEmpty(message = "Please, insert a message")
     @Column(nullable = false)
     private String message;
 

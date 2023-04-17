@@ -1,5 +1,7 @@
 package org.project.java.springfotoalbum.service;
 
+import org.project.java.springfotoalbum.exceptions.MailNotFoundException;
+import org.project.java.springfotoalbum.exceptions.PhotoNotFoundException;
 import org.project.java.springfotoalbum.model.Mail;
 import org.project.java.springfotoalbum.repository.MailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,15 @@ public class MailService {
         newMail.setMail(formMail.getMail());
         newMail.setMessage(formMail.getMessage());
         return mailRepository.save(newMail);
+    }
+    public boolean deleteMail(Integer id) throws MailNotFoundException {
+        mailRepository.findById(id).orElseThrow(()-> new MailNotFoundException(Integer.toString(id)));
+        try {
+            mailRepository.deleteById(id);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
     }
 
 }
